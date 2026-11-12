@@ -8,10 +8,29 @@ run = True
 menu = True
 juego= False
 reglas = False
+key = False 
+
 #i = 0
 
 Vida = 50
 Atk = 4
+pot = 1
+elix = 0
+oro = 0
+x=0
+y=0
+
+        #  x = 0      x = 1     x = 2       x = 3      x = 4      x = 5       x = 6
+mapa = [["llanura", "llanura", "llanura", "llanura",  "bosque",  "montañas", "cueva"],   # y = 0
+        ["bosque",  "bosque",  "bosque",  "bosque",   "bosque",  "colina",   "montaña"], # y = 1
+        ["bosque",  "campo",   "puente",  "llanura",  "colina",  "bosque",   "colina"],  # y = 2
+        ["llanura", "campaña", "pueblo",  "alcaldia", "llanura", "colina",   "montaña"], # y = 3
+        ["llanura", "campo",   "campo",   "llanura",  "colina",  "montaña",  "montaña"]  # y = 4      
+        ]
+
+y_len = len(mapa)-1
+x_len = len(mapa[0])-1
+
 
 def clear():
     subprocess.run("clear")
@@ -27,7 +46,13 @@ def guardar():
     list = [
         nombre,
         str(Vida),
-        str(Atk)
+        str(Atk),
+        str(pot),
+        str(elix),
+        str(oro),
+        str(x),
+        str(y),
+        str(key)
     ]
 
     f = open("load.txt", "w")
@@ -59,7 +84,8 @@ while run:
             bottom()
             reglas = False
             eleccion = " "
-            eleccion =input("> ")
+            #eleccion =input("> ")
+            input("> ")
         else:
             eleccion = input("# ")
 
@@ -70,21 +96,33 @@ while run:
             juego = True 
 
         elif eleccion == "2":
-            f = open("load.txt", "r")
-            load_list =  f.readlines()
-            nombre = load_list[0][:-1]
-            Vida = load_list[1][:-1]
-            Atk = load_list[2][:-1]
-            clear()
-            print("La aventura continua "+ nombre +" !")
-            input("> ")
-            menu = False
-            juego = True
-            
+            try:
+                f = open("load.txt", "r")
+                load_list =  f.readlines()
+
+                if len(load_list) == 9 :
+                    nombre = load_list[0][:-1]
+                    Vida = int(load_list[1][:-1])
+                    Atk = int(load_list[2][:-1])
+                    pot = int(load_list[3][:-1])
+                    clear()
+                    print("La aventura continua "+ nombre +"!")
+                    print("HP = ", Vida)
+                    input("> ")
+                    menu = False
+                    juego = True
+                else: 
+                    print("La partida no se guardo adecuadamente")
+                    print("Corrupt File!")
+                    input("> ")
+            except OSError:
+                print("No hay partidas guardadas")
+                print("> ")
 
         elif eleccion == "3":
             reglas = True
         elif eleccion == "4":
+            clear()
             quit()
 
 
